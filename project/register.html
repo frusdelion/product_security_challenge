@@ -1,0 +1,75 @@
+{{ define "head" }}
+    <title>Registration</title>
+    <script src="https://www.google.com/recaptcha/api.js?render={{.recaptchaSite}}"></script>
+{{end}}
+
+{{ define "content" }}
+
+    <form class="form-signin" action="/register" method="post">
+
+        <input type="hidden" name="__csrf" value="{{.csrf}}"/>
+        <input type="hidden" id="browserfingerprint" name="browser_fingerprint" value="{{.csrf}}"/>
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Register an Account</h1>
+        </div>
+
+
+        {{ include "flashes" }}
+
+
+        <div class="form-row">
+            <div class="col">
+                <div class="form-label-group">
+                    <input type="text" id="inputFirstName" name="first_name" class="form-control" placeholder="First Name" required
+                           autofocus>
+                    <label for="inputFirstName">First Name</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-label-group">
+                    <input type="text" id="inputLastName" name="last_name" class="form-control" placeholder="Last Name" required
+                           >
+                    <label for="inputLastName">Last Name</label>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-label-group">
+            <input type="text" id="inputUsername" autocomplete="username" name="username" class="form-control" placeholder="Username" required
+                   >
+            <label for="inputUsername">Username</label>
+        </div>
+
+        <div class="form-label-group">
+            <input type="email" id="inputEmail" autocomplete="email" name="email" class="form-control" placeholder="Email" required
+                   >
+            <label for="inputEmail">Email</label>
+        </div>
+        <div class="form-label-group">
+            <input type="password" autocomplete="new-password" id="inputPassword1" name="password" class="form-control" placeholder="Password" required
+                   >
+            <label for="inputPassword1">Password</label>
+        </div>
+        <div class="form-label-group">
+            <input type="password" id="inputPassword2" autocomplete="new-password" name="confirm_password" class="form-control" placeholder="Confirm Password" required
+                   >
+            <label for="inputPassword2">Confirm Password</label>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+        <p class="text-center p-2"><a href="/login">I have an account</a></p>
+
+
+        <div>
+            <script>
+                grecaptcha.ready(function () {
+                    grecaptcha.execute('{{.recaptchaSite}}', {action: 'register'}).then(function (token) {
+
+                    });
+                });
+            </script>
+        </div>
+
+    </form>
+{{end}}

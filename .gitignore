@@ -1,0 +1,6 @@
+*.txt.gz
+localhost+1-key.pem
+localhost+1.pem
+vendor/
+.env
+zendesk-product_security_challenge
