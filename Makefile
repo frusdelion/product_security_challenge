@@ -6,8 +6,13 @@ install:
 setup_pwdb:
 	cd ./import-passwords && go build && ./import-passwords
 
-run:
-	maildev -s 2525 -w 8080 &
+maildev:
+	maildev -s 2525 -w 8080 --incoming-user=test --incoming-pass=test
+
+maildev-longrun:
+	maildev -s 2525 -w 8080 --incoming-user=test --incoming-pass=test &
+
+run: maildev-longrun
 	-rm ./zendesk-product_security_challenge
 	go build
 	-./zendesk-product_security_challenge

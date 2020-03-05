@@ -1,0 +1,27 @@
+{{ define "head" }}
+    <title>Security check</title>
+{{end}}
+
+{{define "content"}}
+    <form class="form-signin" action="" method="post">
+        <input type="hidden" name="__csrf" value="{{.csrf}}"/>
+        <input type="hidden" id="browserfingerprint" name="browser_fingerprint" value="{{.csrf}}"/>
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Security check</h1>
+            <p>Welcome, {{.first_name}}. Please check your email for your code.</p>
+        </div>
+
+        {{ include "flashes" }}
+        <div class="form-label-group">
+            <input type="text" inputmode="number" id="inputCode" name="code" class="form-control"
+                   placeholder="Code" required
+                   autofocus>
+            <label for="inputCode">Code</label>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Continue</button>
+        <p class="text-center p-2"><a href="/logout">Logout</a></p>
+
+
+    </form>
+{{end}}

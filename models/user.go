@@ -40,7 +40,7 @@ func (user *User) ComparePassword(givenPassword string) bool {
 }
 
 type FailedLogin struct {
-	gorm.Model
+	BaseModel
 	UserID             uint
 	User               User
 	BrowserFingerprint string
@@ -79,4 +79,13 @@ type AuthenticationRegister struct {
 	BrowserFingerprint string `form:"browser_fingerprint" binding:"required"`
 	BrowserUserAgent   string
 	IPAddress          string
+}
+
+type AuthenticationForgot struct {
+	Email string `form:"email" binding:"required,email"`
+}
+
+type AuthenticationNewPassword struct {
+	Password        string `form:"password" binding:"required,min=7"`
+	ConfirmPassword string `form:"confirm_password" binding:"required,min=7,eqfield=Password"`
 }

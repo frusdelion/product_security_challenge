@@ -17,6 +17,7 @@ type UserRepository interface {
 	DeleteUser(user *models.User) error
 
 	FindUserByUsername(username string) (*models.User, error)
+	FindUserByEmail(email string) (*models.User, error)
 	FindUserByUserID(userID uint) (*models.User, error)
 }
 
@@ -38,6 +39,11 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 type userRepository struct {
 	db   *gorm.DB
 	pwdb *boltpw.BoltDB
+}
+
+func (u userRepository) FindUserByEmail(email string) (*models.User, error) {
+	user := &models.User{}
+	return user, u.db.Find(user, models.User{Email: email}).Error
 }
 
 func (u userRepository) FindUserByUserID(userID uint) (*models.User, error) {

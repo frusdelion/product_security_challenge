@@ -11,9 +11,9 @@ import (
 )
 
 type CommunicationsService interface {
-	SendMFAEmail(user *models.User, Code string, userAgent string, ipAddress string) error
-	SendPasswordForgotEmail(user *models.User, Code string, userAgent string, ipAddress string) error
-	SendRegistrationValidationEmail(user *models.User, Code string) error
+	SendMFAEmail(user *models.User, Code string, expiresOn time.Time, userAgent string, ipAddress string) error
+	SendPasswordForgotEmail(user *models.User, Code string, expiresOn time.Time, userAgent string, ipAddress string) error
+	SendRegistrationValidationEmail(user *models.User, Code string, expiresOn time.Time) error
 }
 
 func NewCommunicationsService(s server2.Server) CommunicationsService {
@@ -34,7 +34,7 @@ type communicationsService struct {
 	hm hermes.Hermes
 }
 
-func (c communicationsService) SendMFAEmail(user *models.User, Code string, userAgent string, ipAddress string) error {
+func (c communicationsService) SendMFAEmail(user *models.User, Code string, expiresOn time.Time, userAgent string, ipAddress string) error {
 	email := hermes.Email{
 		Body: hermes.Body{
 			Name: "Multi-factor Authentication",
@@ -58,6 +58,7 @@ func (c communicationsService) SendMFAEmail(user *models.User, Code string, user
 			},
 
 			Outros: []string{
+				fmt.Sprintf("This code will expire at %s.", expiresOn.Format("Mon Jan 2 15:04:05 -0700 MST 2006")),
 				"If this is not you, you may disregard this message.",
 			},
 		},
@@ -82,7 +83,7 @@ func (c communicationsService) SendMFAEmail(user *models.User, Code string, user
 	}, 3*time.Second)
 }
 
-func (c communicationsService) SendPasswordForgotEmail(user *models.User, Code string, userAgent string, ipAddress string) error {
+func (c communicationsService) SendPasswordForgotEmail(user *models.User, Code string, expiresOn time.Time, userAgent string, ipAddress string) error {
 	email := hermes.Email{
 		Body: hermes.Body{
 			Name: "Password reset request",
@@ -112,6 +113,7 @@ func (c communicationsService) SendPasswordForgotEmail(user *models.User, Code s
 			},
 
 			Outros: []string{
+				fmt.Sprintf("This link will expire on %s.", expiresOn.Format(expiresOn.Format("Mon Jan 2 15:04:05 -0700 MST 2006"))),
 				"If this is not you, you may disregard this message.",
 			},
 		},
@@ -136,7 +138,7 @@ func (c communicationsService) SendPasswordForgotEmail(user *models.User, Code s
 	}, 3*time.Second)
 }
 
-func (c communicationsService) SendRegistrationValidationEmail(user *models.User, Code string) error {
+func (c communicationsService) SendRegistrationValidationEmail(user *models.User, Code string, expiresOn time.Time) error {
 	email := hermes.Email{
 		Body: hermes.Body{
 			Name: "Complete your Registration",
@@ -155,6 +157,7 @@ func (c communicationsService) SendRegistrationValidationEmail(user *models.User
 			},
 
 			Outros: []string{
+				fmt.Sprintf("This link expires on %s.", expiresOn.Format(expiresOn.Format("Mon Jan 2 15:04:05 -0700 MST 2006"))),
 				"If this is not you, you may disregard this message.",
 			},
 		},

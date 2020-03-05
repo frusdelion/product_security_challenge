@@ -1,0 +1,21 @@
+{{ define "head"}}
+    <title>Welcome</title>
+{{end}}
+{{ define "content"}}
+
+    <div class="form-signin">
+
+        <input type="hidden" name="__csrf" value="{{.csrf}}"/>
+        <input type="hidden" id="browserfingerprint" name="browser_fingerprint" value="{{.csrf}}"/>
+        <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">Welcome, {{.User.FirstName}}</h1>
+        </div>
+
+        <div>
+
+        </div>
+
+        <a href="/logout" class="btn btn-lg btn-primary btn-block">Sign out</a>
+
+    </div>
+{{end}}

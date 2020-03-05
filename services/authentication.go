@@ -27,14 +27,15 @@ type AuthenticationService interface {
 	ValidateJWTKey(tokenString string) (*models.AuthenticateClaims, error)
 }
 
-func NewAuthenticationService(r repositories.AuthenticationRepository, u repositories.UserRepository, s server2.Server) AuthenticationService {
-	return &authenticationService{r: r, u: u, s: s}
+func NewAuthenticationService(r repositories.AuthenticationRepository, u repositories.UserRepository, v VerificationService, s server2.Server) AuthenticationService {
+	return &authenticationService{r: r, u: u, s: s, v: v}
 }
 
 type authenticationService struct {
 	r repositories.AuthenticationRepository
 	u repositories.UserRepository
 	s server2.Server
+	v VerificationService
 }
 
 func (a authenticationService) RetrieveUserFromClaims(claim *models.AuthenticateClaims) (*models.User, error) {
@@ -150,11 +151,20 @@ func (a authenticationService) GenerateJWTKey(claim *models.AuthenticateClaims) 
 }
 
 func (a authenticationService) Register(register *models.AuthenticationRegister) (*models.User, error) {
-	return a.u.CreateUser(&models.User{
+	usr, err := a.u.CreateUser(&models.User{
 		Email:     register.Email,
 		Password:  register.Password,
 		FirstName: register.FirstName,
 		LastName:  register.LastName,
 		Username:  register.Username,
 	})
+	if errlog.Debug(err) {
+		return nil, err
+	}
+
+	if err := a.v.SendRegistrationVerification(usr); errlog.Debug(err) {
+		return nil, err
+	}
+
+	return usr, nil
 }

@@ -78,12 +78,13 @@ func NewServer(log *logrus.Logger) server2.Server {
 	ctx, cancelFunc := context.WithCancel(context.Background())
 
 	emailHost := fmt.Sprintf("%s:%d", sc.SMTPHost, sc.SMTPPort)
-	emailPool, err := jwemail.NewPool(emailHost, 1, smtp.PlainAuth("", sc.SMTPUsername, sc.SMTPPassword, emailHost))
+	emailPool, err := jwemail.NewPool(emailHost, 1, smtp.PlainAuth("", sc.SMTPUsername, sc.SMTPPassword, sc.SMTPHost))
 	if errlog.Debug(err) {
 		log.Panic(err)
 	}
 
 	db, err := gorm.Open("sqlite3", "./db.sqlite3")
+	db.LogMode(true)
 	if errlog.Debug(err) {
 		log.Panic(err)
 	}
@@ -133,6 +134,7 @@ func (s server) AutoMigrate() {
 	s.DB().AutoMigrate(
 		&models.User{},
 		&models.FailedLogin{},
+		&models.Verification{},
 	)
 }
 
@@ -201,6 +203,8 @@ func (s server) Run() {
 	// kill -9 is syscall.SIGKILL but can't be catch, so don't need add it
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
+
+	s.emailPool.Close()
 
 	s.Log().Println("Shutdown Server ...")
 
