@@ -23,8 +23,4 @@ type ServerConfiguration struct {
 
 	// Password Policy
 	PasswordDatabaseURL string `default:"./common-passwords.db"`
-
-	// ReCaptcha Settings
-	RecaptchaSiteKey   string `required:"true" split_words:"true"`
-	RecaptchaSecretKey string `required:"true" split_words:"true"`
 }

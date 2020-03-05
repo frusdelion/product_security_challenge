@@ -51,6 +51,7 @@ type FailedLogin struct {
 }
 
 type AuthenticateUser struct {
+	Remember           string `form:"remember"`
 	Username           string `form:"username" binding:"required,alphanum"`
 	Password           string `form:"password" binding:"required"`
 	BrowserFingerprint string `form:"browser_fingerprint" binding:"required"`

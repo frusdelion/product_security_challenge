@@ -58,7 +58,7 @@ func (c communicationsService) SendMFAEmail(user *models.User, Code string, expi
 			},
 
 			Outros: []string{
-				fmt.Sprintf("This code will expire at %s.", expiresOn.Format("Mon Jan 2 15:04:05 -0700 MST 2006")),
+				fmt.Sprintf("This code will expire on %s.", expiresOn.Format("Mon Jan 2 15:04:05 -0700 MST 2006")),
 				"If this is not you, you may disregard this message.",
 			},
 		},

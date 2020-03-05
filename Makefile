@@ -14,6 +14,7 @@ maildev-longrun:
 
 run: maildev-longrun
 	-rm ./zendesk-product_security_challenge
+	rice embed-go
 	go build
 	-./zendesk-product_security_challenge
 	kill $$(ps aux | grep maildev | grep -v grep | awk '{print $$2}')

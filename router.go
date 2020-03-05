@@ -145,7 +145,6 @@ func (s *server) Routes() {
 			"csrf":          csrf.GetToken(ctx),
 			"error":         errorFlash,
 			"message":       messageFlash,
-			"recaptchaSite": s.Config().RecaptchaSiteKey,
 		})
 	})
 

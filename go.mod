@@ -12,6 +12,7 @@ require (
 	github.com/daaku/go.zipexe v1.0.1 // indirect
 	github.com/danielkov/gin-helmet v0.0.0-20171108135313-1387e224435e
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/dvwright/xss-mw v0.0.0-20191029162136-7a0dab86d8f6
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/foolin/goview v0.3.0
 	github.com/gin-contrib/cors v1.3.0
@@ -30,9 +31,11 @@ require (
 	github.com/klauspost/pgzip v1.2.1 // indirect
 	github.com/matcornic/hermes v1.2.0
 	github.com/matoous/go-nanoid v1.2.0
+	github.com/microcosm-cc/bluemonday v1.0.2 // indirect
 	github.com/mitchellh/copystructure v1.0.0 // indirect
 	github.com/nkovacs/streamquote v1.0.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.4 // indirect
+	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	github.com/snwfdhmp/errlog v0.0.0-20191219134421-4c9e67f11ebc
@@ -41,7 +44,9 @@ require (
 	github.com/utrack/gin-csrf v0.0.0-20190424104817-40fb8d2c8fca
 	github.com/utrack/gin-merry v0.0.0-20160429113854-ed2bd26ee5ad
 	github.com/valyala/fasttemplate v1.1.0 // indirect
+	github.com/yangxikun/gin-limit-by-key v0.0.0-20190512072151-520697354d5f
 	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
+	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	gopkg.in/go-playground/validator.v9 v9.29.1
 	gopkg.in/russross/blackfriday.v2 v2.0.1 // indirect
 

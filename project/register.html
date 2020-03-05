@@ -1,6 +1,5 @@
 {{ define "head" }}
     <title>Registration</title>
-    <script src="https://www.google.com/recaptcha/api.js?render={{.recaptchaSite}}"></script>
 {{end}}
 
 {{ define "content" }}
@@ -20,15 +19,17 @@
         <div class="form-row">
             <div class="col">
                 <div class="form-label-group">
-                    <input type="text" id="inputFirstName" name="first_name" class="form-control" placeholder="First Name" required
+                    <input type="text" id="inputFirstName" name="first_name" class="form-control"
+                           placeholder="First Name" required
                            autofocus>
                     <label for="inputFirstName">First Name</label>
                 </div>
             </div>
             <div class="col">
                 <div class="form-label-group">
-                    <input type="text" id="inputLastName" name="last_name" class="form-control" placeholder="Last Name" required
-                           >
+                    <input type="text" id="inputLastName" name="last_name" class="form-control" placeholder="Last Name"
+                           required
+                    >
                     <label for="inputLastName">Last Name</label>
                 </div>
             </div>
@@ -36,40 +37,57 @@
 
 
         <div class="form-label-group">
-            <input type="text" id="inputUsername" autocomplete="username" name="username" class="form-control" placeholder="Username" required
-                   >
+            <input type="text" id="inputUsername" autocomplete="username" name="username" class="form-control"
+                   placeholder="Username" required
+            >
             <label for="inputUsername">Username</label>
         </div>
 
         <div class="form-label-group">
-            <input type="email" id="inputEmail" autocomplete="email" name="email" class="form-control" placeholder="Email" required
-                   >
+            <input type="email" id="inputEmail" autocomplete="email" name="email" class="form-control"
+                   placeholder="Email" required
+            >
             <label for="inputEmail">Email</label>
         </div>
         <div class="form-label-group">
-            <input type="password" autocomplete="new-password" id="inputPassword1" name="password" class="form-control" placeholder="Password" required
-                   >
+            <input type="password" autocomplete="new-password" id="inputPassword1" name="password" class="form-control"
+                   placeholder="Password" required
+                   onkeyup="window.handlePasswordStrength()">
             <label for="inputPassword1">Password</label>
+            <div id="inputPassword1-invalid" class="invalid-feedback">
+                Please choose a better password.
+            </div>
         </div>
         <div class="form-label-group">
-            <input type="password" id="inputPassword2" autocomplete="new-password" name="confirm_password" class="form-control" placeholder="Confirm Password" required
-                   >
+            <input type="password" id="inputPassword2" autocomplete="new-password" name="confirm_password"
+                   class="form-control" placeholder="Confirm Password" required
+            >
             <label for="inputPassword2">Confirm Password</label>
         </div>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="registerButton" disabled>Register</button>
         <p class="text-center p-2"><a href="/login">I have an account</a></p>
 
-
-        <div>
-            <script>
-                grecaptcha.ready(function () {
-                    grecaptcha.execute('{{.recaptchaSite}}', {action: 'register'}).then(function (token) {
-
-                    });
-                });
-            </script>
-        </div>
-
     </form>
+    <script src="./assets/zxcvbn.js" integrity="sha384-oc/YDFzvS8JHF3eAIt6JhDGcyfwNpFWh63RLFzA5ledszzsRKibzJd61m78XmK/v"
+            crossorigin="anonymous"></script>
+    <script src="./assets/main.js"></script>
+    <script>
+        window.handlePasswordStrength = debounce(function () {
+            console.log(document.getElementById("inputPassword1").value);
+            let result = zxcvbn(document.getElementById("inputPassword1").value);
+            console.log(result);
+            let ip = document.getElementById("inputPassword1");
+            if (result.score < 3) {
+                ip.className = "form-control is-invalid";
+                document.getElementById("inputPassword1-invalid").innerHTML = `${result.feedback.warning != "" ? result.feedback.warning + "<br/>" : ""}${result.feedback.suggestions.length > 0 && result.feedback.suggestions.join('. ')}`;
+
+                document.getElementById("registerButton").disabled = true;
+            } else {
+                ip.className = "form-control";
+
+                document.getElementById("registerButton").disabled = false;
+            }
+        }, 250);
+    </script>
 {{end}}

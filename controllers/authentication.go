@@ -236,6 +236,10 @@ func (a authenticationController) PostLogin(c *gin.Context) {
 	}
 
 	session := sessions.Default(c)
+	if au.Remember == "" {
+		session.Options(sessions.Options{MaxAge: 3 * 60})
+	}
+
 	session.Set("user", jwtKey)
 	session.Set("mfa", false)
 	session.Save()

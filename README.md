@@ -1,6 +1,18 @@
 # Zendesk Product Security
 ### The Zendesk Product Security Challenge
 
+- [Instructions](#instructions)
+- [Installation](#installation)
+
+## Installation
+### Requirements
+* Golang 1.13
+
+For local demonstration of email, the following is required:
+* NodeJS 13
+
+## Instructions
+
 Hello friend,
 
 We are super excited that you want to be part of the Product Security team at Zendesk.
