@@ -57,30 +57,30 @@ $ make pkg
 
 ## Features
 The web application has the following features:
--[x] Brand new look (Bootstrap)
--[x] Input sanitization and validation
--[x] Password hashed
+- [x] Brand new look (Bootstrap)
+- [x] Input sanitization and validation
+- [x] Password hashed
     - bcrypt
--[x] Prevention of timing attacks
+- [x] Prevention of timing attacks
     - Rate-limiting for all requests to the site
     - Maximum failed attempts on login
     - Temporary ban when maximum failed attempts threshold reached
--[x] Logging
+- [x] Logging
     - Logging all DB (optional)
     - Logging all requests
--[x] CSRF prevention
--[x] Multi factor authentication
+- [x] CSRF prevention
+- [x] Multi factor authentication
     - MFA through [emails](https://github.com/matcornic/hermes)
--[x] Password reset / forget password mechanism
+- [x] Password reset / forget password mechanism
     - Password reset through [emails](https://github.com/matcornic/hermes)
--[ ] Account lockout
+- [ ] Account lockout
     - Temporary ban by IP & Browser
     - User account is not locked when temporary ban is placed on offending client
--[x] Cookie
+- [x] Cookie
     - Secure, HttpOnly
--[x] HTTPS
+- [x] HTTPS
     - Self-signed certificates
--[x] Known password check
+- [x] Known password check
     - [zxcvbn by Dropbox](https://github.com/dropbox/zxcvbn) for client-side password advice
     - [Valve fingerprintjs2](https://github.com/Valve/fingerprintjs2) for browser fingerprinting
     - [CrackStation's password cracking dictionary](https://crackstation.net/buy-crackstation-wordlist-password-cracking-dictionary.htm) for matching against well-known passwords.
@@ -88,8 +88,8 @@ The web application has the following features:
 The application starts with an empty database. Please sign up as a user before trying out the features.
 
 ### Future Steps
--[ ] Test coverage
--[ ] OAuth2
+- [ ] Test coverage
+- [ ] OAuth2
 
 ## Instructions
 
