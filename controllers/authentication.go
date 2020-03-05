@@ -45,8 +45,15 @@ func (a authenticationController) GetNewPasswordForm(c *gin.Context) {
 		return
 	}
 
+	session := sessions.Default(c)
+	errorFlash := session.Flashes("error")
+	messageFlash := session.Flashes("message")
+	session.Save()
+
 	c.HTML(http.StatusOK, "newpassword", gin.H{
-		"csrf": csrf.GetToken(c),
+		"csrf":    csrf.GetToken(c),
+		"error":   errorFlash,
+		"message": messageFlash,
 	})
 }
 
@@ -61,6 +68,7 @@ func (a authenticationController) PostNewPassword(c *gin.Context) {
 
 	anp := &models.AuthenticationNewPassword{}
 	if err := c.ShouldBind(anp); errlog.Debug(err) {
+		c.Error(err)
 		session := sessions.Default(c)
 		session.AddFlash(err.Error(), "error")
 		session.Save()
@@ -68,16 +76,20 @@ func (a authenticationController) PostNewPassword(c *gin.Context) {
 		return
 	}
 
-	_, err = a.us.UpdateUser(&vr.User, models.User{Password: anp.Password})
+	usr, err := a.us.UpdateUser(&vr.User, models.User{Password: anp.Password})
 	if errlog.Debug(err) {
+		c.Error(err)
 		session := sessions.Default(c)
 		session.AddFlash(err.Error(), "error")
 		session.Save()
 		c.Redirect(http.StatusSeeOther, fmt.Sprintf("/newpassword/%s", code))
 		return
 	}
+
+	a.s.Log().Infof("%v", usr)
 
 	if err := a.vs.DeleteVerification(vr); errlog.Debug(err) {
+		c.Error(err)
 		session := sessions.Default(c)
 		session.AddFlash(err.Error(), "error")
 		session.Save()

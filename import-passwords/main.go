@@ -36,7 +36,7 @@ var (
 func main() {
 	file, err := os.Open(CommonPasswordsDbFile)
 	if errlog.Debug(err) {
-		if ! os.IsNotExist(err) {
+		if !os.IsNotExist(err) {
 			panic(err)
 		}
 	}

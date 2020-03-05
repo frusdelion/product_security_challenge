@@ -27,6 +27,7 @@ import (
 	"time"
 
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/utrack/gin-merry"
 )
 
 func NewServer(log *logrus.Logger) server2.Server {
@@ -73,12 +74,21 @@ func NewServer(log *logrus.Logger) server2.Server {
 		MaxAge: 12 * time.Hour,
 	}))
 
+	merryMl := &ginMerry.Middleware{
+		Debug:        false,
+		GenericError: "We have encountered an error.",
+		LogFunc: func(err string, code int, vals map[string]interface{}) {
+			log.Errorf("[%d] %s (%v)", code, err, vals)
+		},
+	}
+
+	r.Use(merryMl.Handler())
 	r.Use(helmet.Default())
 
 	ctx, cancelFunc := context.WithCancel(context.Background())
 
 	emailHost := fmt.Sprintf("%s:%d", sc.SMTPHost, sc.SMTPPort)
-	emailPool, err := jwemail.NewPool(emailHost, 1, smtp.PlainAuth("", sc.SMTPUsername, sc.SMTPPassword, sc.SMTPHost))
+	emailPool, err := jwemail.NewPool(emailHost, 4, smtp.PlainAuth("", sc.SMTPUsername, sc.SMTPPassword, sc.SMTPHost))
 	if errlog.Debug(err) {
 		log.Panic(err)
 	}

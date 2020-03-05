@@ -3,10 +3,13 @@ module github.com/frusdelion/zendesk-product_security_challenge
 go 1.13
 
 require (
+	github.com/GeertJohan/go.rice v1.0.0
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible // indirect
+	github.com/ansel1/merry v1.5.1 // indirect
 	github.com/boltdb/bolt v1.3.1
+	github.com/daaku/go.zipexe v1.0.1 // indirect
 	github.com/danielkov/gin-helmet v0.0.0-20171108135313-1387e224435e
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/color v1.9.0 // indirect
@@ -28,6 +31,7 @@ require (
 	github.com/matcornic/hermes v1.2.0
 	github.com/matoous/go-nanoid v1.2.0
 	github.com/mitchellh/copystructure v1.0.0 // indirect
+	github.com/nkovacs/streamquote v1.0.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.4 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
@@ -35,7 +39,10 @@ require (
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	github.com/utrack/gin-csrf v0.0.0-20190424104817-40fb8d2c8fca
+	github.com/utrack/gin-merry v0.0.0-20160429113854-ed2bd26ee5ad
+	github.com/valyala/fasttemplate v1.1.0 // indirect
 	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
+	gopkg.in/go-playground/validator.v9 v9.29.1
 	gopkg.in/russross/blackfriday.v2 v2.0.1 // indirect
 
 )

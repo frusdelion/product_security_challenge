@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	rice "github.com/GeertJohan/go.rice"
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/frusdelion/zendesk-product_security_challenge/controllers"
@@ -12,18 +14,34 @@ import (
 	"github.com/snwfdhmp/errlog"
 	csrf "github.com/utrack/gin-csrf"
 	"net/http"
+	"path/filepath"
 )
 
 func (s *server) Routes() {
 	//new template engine
-	s.http.HTMLRender = ginview.New(goview.Config{
+	gvw := ginview.New(goview.Config{
 		Root:      "./project",
 		Extension: ".html",
 		Master:    "./layouts/master",
 	})
 
+	tplFiles := rice.MustFindBox("./project")
+	gvw.SetFileHandler(func(config goview.Config, tplFile string) (content string, err error) {
+		path := filepath.Clean(tplFile + config.Extension)
+
+		//s.Log().Infof("%s", path)
+		content, err = tplFiles.String(path)
+		if errlog.Debug(err) {
+			return "", fmt.Errorf("ViewEngine render read name:%v, path:%v, error: %v", tplFile, path, err)
+		}
+		return
+	})
+
+	s.http.HTMLRender = gvw
+
 	// TODO: go.rice
-	s.http.Static("/assets", "./project/assets")
+	s.http.StaticFS("/assets", rice.MustFindBox("./project/assets").HTTPBox())
+	//s.http.Static("/assets", "./project/assets")
 
 	ur := repositories.NewUserRepository(s.DB())
 	s.Log().Info("Loaded ur service")
@@ -31,7 +49,7 @@ func (s *server) Routes() {
 	us := services.NewUserService(ur)
 
 	s.Log().Info("Loaded us service")
-	vs := services.NewVerificationService(repositories.NewVerificationRepository(s.DB()), services.NewCommunicationsService(s), s, )
+	vs := services.NewVerificationService(repositories.NewVerificationRepository(s.DB()), services.NewCommunicationsService(s), s)
 
 	s.Log().Info("Loaded vs service")
 	as := services.NewAuthenticationService(
@@ -102,7 +120,6 @@ func (s *server) Routes() {
 
 	s.http.GET("/newpassword/:code", ac.GetNewPasswordForm)
 	s.http.POST("/newpassword/:code", ac.PostNewPassword)
-
 
 	s.http.GET("/login", func(ctx *gin.Context) {
 		session := sessions.Default(ctx)

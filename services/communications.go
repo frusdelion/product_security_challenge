@@ -37,7 +37,7 @@ type communicationsService struct {
 func (c communicationsService) SendMFAEmail(user *models.User, Code string, expiresOn time.Time, userAgent string, ipAddress string) error {
 	email := hermes.Email{
 		Body: hermes.Body{
-			Name: "Multi-factor Authentication",
+			Name: user.FirstName,
 			Intros: []string{
 				"We have received a sign in to your account. For your security, here is your sign-in code:",
 			},
@@ -86,7 +86,7 @@ func (c communicationsService) SendMFAEmail(user *models.User, Code string, expi
 func (c communicationsService) SendPasswordForgotEmail(user *models.User, Code string, expiresOn time.Time, userAgent string, ipAddress string) error {
 	email := hermes.Email{
 		Body: hermes.Body{
-			Name: "Password reset request",
+			Name: user.FirstName,
 			Intros: []string{
 				"We have received a request to reset your password. The following is the details of the request:",
 			},
@@ -141,7 +141,7 @@ func (c communicationsService) SendPasswordForgotEmail(user *models.User, Code s
 func (c communicationsService) SendRegistrationValidationEmail(user *models.User, Code string, expiresOn time.Time) error {
 	email := hermes.Email{
 		Body: hermes.Body{
-			Name: "Complete your Registration",
+			Name: user.FirstName,
 			Intros: []string{
 				fmt.Sprintf("Welcome, %s!", user.FirstName),
 				"We are so excited to have you!",
