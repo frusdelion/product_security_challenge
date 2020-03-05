@@ -61,7 +61,7 @@ func pemBlockForKey(priv interface{}) *pem.Block {
 }
 
 func generateSelfSignedCerts(domain string, s *server) error {
-	priv, err := ecdsa.GenerateKey(elliptic.P521(), rand.Reader)
+	priv, err := ecdsa.GenerateKey(elliptic.P384(), rand.Reader)
 	if errlog.Debug(err) {
 		return err
 	}
@@ -72,10 +72,10 @@ func generateSelfSignedCerts(domain string, s *server) error {
 			Organization: []string{"Zendesk Product Security Challenge March 2020"},
 			CommonName:   "localhost",
 		},
-		DNSNames:              []string{"127.0.0.1"},
+		DNSNames:              []string{"localhost", "127.0.0.1"},
 		NotBefore:             time.Now(),
 		NotAfter:              time.Now().Add(time.Hour * 24 * 180),
-		KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
+		KeyUsage:              x509.KeyUsageDigitalSignature,
 		ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
 		BasicConstraintsValid: true,
 	}
