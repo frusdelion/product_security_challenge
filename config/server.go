@@ -23,4 +23,6 @@ type ServerConfiguration struct {
 
 	// Password Policy
 	PasswordDatabaseURL string `default:"./common-passwords.db"`
+
+	DBLogging bool `default:"false"' split_words:"true"`
 }

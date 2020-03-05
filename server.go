@@ -110,7 +110,7 @@ func NewServer(log *logrus.Logger) server2.Server {
 	}
 
 	db, err := gorm.Open("sqlite3", "./db.sqlite3")
-	db.LogMode(true)
+	db.LogMode(sc.DBLogging)
 	if errlog.Debug(err) {
 		log.Panic(err)
 	}

@@ -4,4 +4,7 @@ localhost+1.pem
 vendor/
 .env
 zendesk-product_security_challenge
-build.zip
+build.companions.zip
+build.macos.amd64.zip
+build.linux.amd64.zip
+build.win.amd64.zip

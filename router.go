@@ -44,24 +44,24 @@ func (s *server) Routes() {
 	//s.http.Static("/assets", "./project/assets")
 
 	ur := repositories.NewUserRepository(s.DB())
-	s.Log().Info("Loaded ur service")
+	s.Log().Debug("Loaded ur service")
 
 	us := services.NewUserService(ur)
 
-	s.Log().Info("Loaded us service")
+	s.Log().Debug("Loaded us service")
 	vs := services.NewVerificationService(repositories.NewVerificationRepository(s.DB()), services.NewCommunicationsService(s), s)
 
-	s.Log().Info("Loaded vs service")
+	s.Log().Debug("Loaded vs service")
 	as := services.NewAuthenticationService(
 		repositories.NewAuthenticationRepository(s.DB()),
 		ur,
 		vs,
 		s,
 	)
-	s.Log().Info("Loaded as service")
+	s.Log().Debug("Loaded as service")
 
 	ac := controllers.NewAuthenticationController(s, as, us, vs)
-	s.Log().Info("Loaded ac")
+	s.Log().Debug("Loaded ac")
 
 	r := s.http.Group("/")
 	r.Use(s.middlewareFullAuthorization(as))
