@@ -190,6 +190,7 @@ func (s server) Config() config.ServerConfiguration {
 
 func (s server) Run() {
 	s.GreeterBanner()
+	s.Certificates()
 	s.AutoMigrate()
 	s.Routes()
 
