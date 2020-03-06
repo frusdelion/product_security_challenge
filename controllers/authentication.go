@@ -86,7 +86,7 @@ func (a authenticationController) PostNewPassword(c *gin.Context) {
 		return
 	}
 
-	a.s.Log().Infof("%v", usr)
+	a.s.Log().Infof("[SECURITY EVENT] updated password for %d, ip:%s, browserUA:%s, browserFingerprint:%s", usr.ID, c.ClientIP(), c.GetHeader("User-Agent"), anp.BrowserFingerprint)
 
 	if err := a.vs.DeleteVerification(vr); errlog.Debug(err) {
 		c.Error(err)

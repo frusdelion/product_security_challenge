@@ -65,6 +65,8 @@ func (a authenticationService) AuthenticateUser(login *models.AuthenticateUser) 
 
 		expirationTime := time.Now().Add(time.Duration(a.s.Config().ValidJWTLengthHours) * time.Hour)
 
+		a.s.Log().Infof("[SECURITY EVENT] log in user for %d, ip:%s, browserUA:%s, browserFingerprint:%s", user.ID, login.IPAddress, login.BrowserUserAgent, login.BrowserFingerprint)
+
 		return &models.AuthenticateClaims{
 			UserID: user.ID,
 			Email:  user.Email,
@@ -88,6 +90,8 @@ func (a authenticationService) AuthenticateUser(login *models.AuthenticateUser) 
 		return nil, nil, ErrAccountLocked
 	} else if fl.BannedUntil != nil && time.Now().After(*fl.BannedUntil) {
 		// Ban has been lifted, reset failed logins and try again
+		a.s.Log().Info("[SECURITY EVENT] reset banned client for user id: %d, ip:%s, browserUA:%s, browserFingerprint:%s", user.ID, login.IPAddress, login.BrowserUserAgent, login.BrowserFingerprint)
+
 		if err := a.r.ResetFailedLogins(user, login.BrowserFingerprint, login.BrowserUserAgent, login.IPAddress); errlog.Debug(err) {
 			return nil, nil, err
 		}
@@ -100,11 +104,13 @@ func (a authenticationService) AuthenticateUser(login *models.AuthenticateUser) 
 		if err := a.r.BanUserUntil(fl, 5*time.Minute); errlog.Debug(err) {
 			return nil, nil, err
 		}
+		a.s.Log().Info("[SECURITY EVENT] banned client for user id: %d, ip:%s, browserUA:%s, browserFingerprint:%s, expiresOn:%d", user.ID, login.IPAddress, login.BrowserUserAgent, login.BrowserFingerprint, time.Now().Add(5*time.Minute).Unix())
 
 		return nil, nil, ErrAccountLocked
 	}
 
-	a.s.Log().Info("Recording failed login")
+	a.s.Log().Info("[SECURITY EVENT] failed login: %d, ip:%s, browserUA:%s, browserFingerprint:%s", user.ID, login.IPAddress, login.BrowserUserAgent, login.BrowserFingerprint)
+
 	if err := a.r.RecordFailedLogin(fl); errlog.Debug(err) {
 		return nil, nil, err
 	}
@@ -147,6 +153,8 @@ func (a authenticationService) GenerateJWTKey(claim *models.AuthenticateClaims) 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 	tokenString, err := token.SignedString(jwtKey)
 
+	a.s.Log().Infof("[SECURITY EVENT] generated user key for %d", claim.UserID)
+
 	return tokenString, err
 }
 
@@ -165,6 +173,8 @@ func (a authenticationService) Register(register *models.AuthenticationRegister)
 	if err := a.v.SendRegistrationVerification(usr); errlog.Debug(err) {
 		return nil, err
 	}
+
+	a.s.Log().Infof("[SECURITY EVENT] registered new user for %d, ip:%s, browserUA:%s, browserFingerprint:%s", usr.ID, register.IPAddress, register.BrowserUserAgent, register.BrowserFingerprint)
 
 	return usr, nil
 }

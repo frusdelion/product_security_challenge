@@ -66,6 +66,8 @@ func (v verificationService) SendRegistrationVerification(user *models.User) err
 		return err
 	}
 
+	v.s.Log().Infof("[SECURITY EVENT] registration verification for %d", vc.UserID)
+
 	return nil
 }
 
@@ -78,6 +80,8 @@ func (v verificationService) SendForgotPasswordVerification(user *models.User, u
 	if err := v.c.SendPasswordForgotEmail(user, vc.Code, vc.ExpiresOn, userAgent, ipAddress); errlog.Debug(err) {
 		return err
 	}
+
+	v.s.Log().Infof("[SECURITY EVENT] forgot password for %d, ip:%s, browserUA:%s", vc.UserID, ipAddress, userAgent)
 
 	return nil
 }
@@ -92,5 +96,6 @@ func (v verificationService) SendMFAVerification(user *models.User, userAgent st
 		return err
 	}
 
+	v.s.Log().Infof("[SECURITY EVENT] mfa verification for %d, ip:%s, browserUA:%s", vc.UserID, ipAddress, userAgent)
 	return nil
 }

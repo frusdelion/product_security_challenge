@@ -89,4 +89,5 @@ type AuthenticationForgot struct {
 type AuthenticationNewPassword struct {
 	Password        string `form:"password" binding:"required,min=7"`
 	ConfirmPassword string `form:"confirm_password" binding:"required,min=7,eqfield=Password"`
+	BrowserFingerprint string `form:"browser_fingerprint" binding:"required"`
 }
