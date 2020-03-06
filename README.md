@@ -10,6 +10,9 @@
 * Docker Desktop
 * Go 1.13
 
+### Download
+Please download the [releases](https://github.com/frusdelion/product_security_challenge/releases) before continuing with the instructions below. If you would like to compile the code, please follow the instructions [here for macOS and Linux](https://github.com/frusdelion/product_security_challenge#build-from-source-macos).
+
 ### macOS and Linux install
 Open a bash shell and run the following:  
 ```bash
